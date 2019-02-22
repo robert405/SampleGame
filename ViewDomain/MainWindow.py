@@ -6,7 +6,6 @@ from GameDomain.HumanPlayer import HumanPlayer
 from GameDomain.Ai import Ai
 from GameDomain.Observer import Observer
 from GameDomain.GameEngine import GameEngine
-from GameDomain.Ability import Ability
 
 class MainWindow(Observer):
 
@@ -50,6 +49,12 @@ class MainWindow(Observer):
         if (self.ability is not None):
             self.ability.set(team, id)
 
+    def startTurn(self, players):
+
+        self.gameEngine = GameEngine(self, players)
+        self.fightThread = threading.Thread(target=self.gameEngine.oneTurn, args=())
+        self.fightThread.start()
+
     def launchFight(self):
 
         players = {}
@@ -57,9 +62,7 @@ class MainWindow(Observer):
         players[1] = {2: Ai(1), 5: Ai(1)}
 
         self.loadTeamButton(players)
-        self.gameEngine = GameEngine(self, players)
-        self.fightThread = threading.Thread(target=self.gameEngine.oneTurn, args=())
-        self.fightThread.start()
+        self.startTurn(players)
 
 
     def loadTeamButton(self, players):
@@ -117,7 +120,7 @@ class MainWindow(Observer):
 
         print("attack_id-" + str(id))
         self.labelMsg.set("Using attack id-" + str(id))
-        self.ability = Ability()
+        self.ability = self.currentPlayer.character.abilities[id]
 
 
     def loadAttackButton(self, player):
@@ -125,10 +128,12 @@ class MainWindow(Observer):
         self.attackButtons = []
         buttonWith = 100
         buttonHeigh = 100
+        playerAbilities = player.character.abilities
 
-        for i in range(6):
+        for i in range(len(playerAbilities)):
 
-            button = Button(self.bottomFrame, image=self.emptyImg, command=partial(self.chooseAbility, i + 1), height=buttonHeigh, width=buttonWith)
+            image = playerAbilities[i].image
+            button = Button(self.bottomFrame, image=image, command=partial(self.chooseAbility, i), height=buttonHeigh, width=buttonWith)
             button.grid(row=i%2, column=int(i/2))
 
             self.attackButtons += [button]
@@ -137,6 +142,7 @@ class MainWindow(Observer):
     def updateTurn(self, allPlayer, moves):
 
         self.loadTeamButton(allPlayer)
+        self.startTurn(allPlayer)
 
 
     def getHumanPlayerMove(self, player):

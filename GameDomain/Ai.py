@@ -1,5 +1,4 @@
 from GameDomain.Character import Character
-from GameDomain.Ability import Ability
 from GameDomain.Player import Player
 import PIL
 import numpy as np
@@ -15,7 +14,7 @@ class Ai(Player):
 
     def getMove(self, players, queue):
 
-        move = Ability()
+        move = self.character.abilities[0]
         move.set(0, 0)
 
         queue.put(move)
