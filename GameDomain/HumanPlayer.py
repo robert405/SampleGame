@@ -13,6 +13,7 @@ class HumanPlayer(Player):
         self.mainWindow = mainWindow
         self.image = self.getBaseImage(team)
         self.currentImage = None
+        self.playerType = 0
 
 
     def getMove(self, players, queue):

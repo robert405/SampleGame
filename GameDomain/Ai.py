@@ -7,15 +7,20 @@ class Ai(Player):
 
     def __init__(self, team):
 
+        self.team = team
         self.character = Character()
         self.image = self.getBaseImage(team)
         self.currentImage = None
+        self.playerType = 1
 
 
     def getMove(self, players, queue):
 
+        opTeam = self.getOpponentTeam(self.team)
+        ids = list(players[opTeam].keys())
+
         move = self.character.abilities[0]
-        move.set(0, 0)
+        move.set(opTeam, ids[0])
 
         queue.put(move)
 

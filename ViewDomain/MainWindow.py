@@ -49,20 +49,21 @@ class MainWindow(Observer):
         if (self.ability is not None):
             self.ability.set(team, id)
 
-    def startTurn(self, players):
+    def startTurn(self):
 
-        self.gameEngine = GameEngine(self, players)
         self.fightThread = threading.Thread(target=self.gameEngine.oneTurn, args=())
         self.fightThread.start()
 
     def launchFight(self):
 
         players = {}
-        players[0] = {0: HumanPlayer(self, 0), 3: Ai(0)}
+        players[0] = {0: Ai(0), 3: HumanPlayer(self, 0)}
         players[1] = {2: Ai(1), 5: Ai(1)}
 
+        self.gameEngine = GameEngine(self, players)
+
         self.loadTeamButton(players)
-        self.startTurn(players)
+        self.startTurn()
 
 
     def loadTeamButton(self, players):
@@ -141,8 +142,10 @@ class MainWindow(Observer):
 
     def updateTurn(self, allPlayer, moves):
 
-        self.loadTeamButton(allPlayer)
-        self.startTurn(allPlayer)
+        if (not self.gameEngine.fightIsFinish):
+
+            self.loadTeamButton(allPlayer)
+            self.startTurn()
 
 
     def getHumanPlayerMove(self, player):

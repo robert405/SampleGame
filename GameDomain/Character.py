@@ -10,3 +10,7 @@ class Character:
                           Ability("./Ressource/LightningAttack.jpg"),
                           Ability("./Ressource/SolarAttack.jpg"),
                           Ability("./Ressource/CloudAttack.jpg")]
+
+    def isDead(self):
+
+        return self.baseStats.life <= 0

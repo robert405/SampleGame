@@ -7,7 +7,7 @@ class Ability:
     def __init__(self, imgPath):
 
         self.effect = Attack()
-        self.accuracy = 0.95
+        self.accuracy = 1
         self.teamTarget = None
         self.idTarget = None
         self.targetIsSet = False

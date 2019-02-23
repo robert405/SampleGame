@@ -10,3 +10,7 @@ class Player(ABC):
     def getImage(self):
         pass
 
+    def getOpponentTeam(self, team):
+
+        return (team + 1) % 2
+
